@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Каталог пользователей</string>
+    <string name="et_name">Имя</string>
+    <string name="et_age">Возраст</string>
+    <string name="btn_save">Сохранить</string>
+</resources>
