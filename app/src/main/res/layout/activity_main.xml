@@ -12,7 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="64dp"
+        android:minHeight="@dimen/toolbarHeight"
         android:background="#6750a4"
         app:title="@string/app_name"
         app:titleTextColor="@color/white"/>
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/marginTop"
         android:orientation="horizontal">
 
         <EditText
@@ -33,7 +33,7 @@
             android:gravity="center"
             android:hint="@string/et_name"
             android:inputType="text"
-            android:textSize="24sp"
+            android:textSize="@dimen/textSize"
             android:textColorHint="@color/light_gray"/>
 
         <EditText
@@ -45,7 +45,7 @@
             android:gravity="center"
             android:hint="@string/et_age"
             android:inputType="number"
-            android:textSize="24sp"
+            android:textSize="@dimen/textSize"
             android:textColorHint="@color/light_gray"/>
 
     </LinearLayout>
@@ -55,14 +55,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/marginTop"
         android:text="@string/btn_save"
-        android:textSize="24sp" />
+        android:textSize="@dimen/textSize" />
 
     <ListView
         android:id="@+id/lv_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="@dimen/marginTop"/>
 
 </LinearLayout>
