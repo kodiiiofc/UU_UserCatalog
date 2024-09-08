@@ -17,7 +17,9 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.snackbar.Snackbar
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Removable {
+
+    private var adapter: ArrayAdapter<User>? = null
 
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var nameET: EditText
@@ -39,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, users)
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, users)
         usersLV.adapter = adapter
 
         saveBTN.setOnClickListener {
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 val age = ageET.text.toString().toInt()
                 val user = User(name, age)
                 users.add(user)
-                adapter.notifyDataSetChanged()
+                adapter!!.notifyDataSetChanged()
                 nameET.text.clear()
                 ageET.text.clear()
             }
@@ -56,12 +58,13 @@ class MainActivity : AppCompatActivity() {
 
         usersLV.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-                val user = adapter.getItem(position)
-                Snackbar.make(view, "Удалить пользователя ${user!!.name}?", Snackbar.LENGTH_LONG)
-                    .setAction("Удалить") {
-                        adapter.remove(user)
-                        Snackbar.make(view, "Пользователь удален", Snackbar.LENGTH_SHORT).show()
-                    }.show()
+                val user = adapter!!.getItem(position)
+                val dialog = MyDialog()
+                val args = Bundle()
+                args.putParcelable("user", user!!) // передаем имя в Bundle
+                dialog.arguments = args
+                dialog.show(supportFragmentManager, "custom")
+
             }
 
     }
@@ -79,6 +82,10 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+
+    override fun remove(user: User?) {
+        adapter?.remove(user)
+    }
 
     fun checkET(): Boolean {
         var flag = true
@@ -101,12 +108,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         return flag
-    }
-
-    data class User(val name: String, val age: Int) {
-        override fun toString(): String {
-            return "Имя: $name, возраст: $age"
-        }
     }
 
 }
