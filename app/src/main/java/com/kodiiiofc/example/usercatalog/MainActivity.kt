@@ -1,6 +1,5 @@
 package com.kodiiiofc.example.usercatalog
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
@@ -10,11 +9,9 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
-import androidx.activity.enableEdgeToEdge
-import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.DrawableCompat
-import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 
 class MainActivity : AppCompatActivity(), Removable {
@@ -27,7 +24,7 @@ class MainActivity : AppCompatActivity(), Removable {
     private lateinit var saveBTN: Button
     private lateinit var usersLV: ListView
 
-    val users: MutableList<User> = mutableListOf()
+    lateinit var usersViewModel: UsersViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +38,25 @@ class MainActivity : AppCompatActivity(), Removable {
 
         setSupportActionBar(toolbar)
 
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, users)
+        usersViewModel = ViewModelProvider(this)[UsersViewModel::class.java]
+
+
+        //связываем список LiveData users с ListView
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, usersViewModel.users.value!!)
         usersLV.adapter = adapter
+
+        usersViewModel.users.observe(this, Observer {
+            adapter!!.notifyDataSetChanged()
+        })
 
         saveBTN.setOnClickListener {
             if (checkET()) {
                 val name = nameET.text.toString()
                 val age = ageET.text.toString().toInt()
                 val user = User(name, age)
-                users.add(user)
-                adapter!!.notifyDataSetChanged()
+
+                usersViewModel.mutableUserList.add(user)
+                usersViewModel.users.value = usersViewModel.mutableUserList
                 nameET.text.clear()
                 ageET.text.clear()
             }

@@ -25,6 +25,7 @@ class MyDialog : DialogFragment() {
             .setCancelable(true)
             .setPositiveButton("Да") { dialog, which ->
                 removable?.remove(user)
+                dialog.dismiss()
             }
             .setNegativeButton("Нет") { dialog, which -> dialog.cancel() }
             .create()
